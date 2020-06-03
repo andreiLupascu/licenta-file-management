@@ -7,6 +7,7 @@ app = Blueprint("file_management", __name__, url_prefix="")
 
 @app.route("/api/files/<file_type>/<directory>", methods=['POST'])
 def upload_file(file_type, directory):
+    # NEEDS form-data parameter with name = 'file' and value being the chosen file
     # <directory> is either name of the article or name of the conference
     try:
         response, status_code = upload(request, file_type, directory)
