@@ -21,8 +21,13 @@ def upload_file(file_type, directory):
 
 
 @app.route("/api/files/<file_type>/<directory>/<file_name>", methods=['GET'])
+@jwt_required
 def retrieve_file(file_type, directory, file_name):
     # <file_type> is one of: 'conference_logo', 'conference_description', 'article_paper', 'article_abstract'
     # <directory> is either name of the article or name of the conference
-    verify_can_download(get_jwt_identity())
-    return retrieve(file_type, directory, file_name)
+    try:
+        verify_can_download(get_jwt_identity())
+        return retrieve(file_type, directory, file_name)
+    except TypeError as e:
+        print(e)
+        return jsonify({"msg": "Unauthorized roles"}), 403
